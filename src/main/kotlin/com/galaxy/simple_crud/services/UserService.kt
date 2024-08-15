@@ -7,7 +7,8 @@ import org.springframework.stereotype.Service
 
 @Service
 class UserService(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val hashService: HashService
 ) {
     fun findAll(): List<User> {
         val users = mutableListOf<User>()
@@ -26,7 +27,7 @@ class UserService(
     fun store(userDto: UserDto) {
         val user = User(
             email = userDto.email,
-            password = userDto.password,
+            password = hashService.hashBcrypt(userDto.password),
             role = userDto.role
         )
         userRepository.save(user)
@@ -38,7 +39,7 @@ class UserService(
             val user = User(
                 id = id,
                 email = userDto.email,
-                password = userDto.password,
+                password = hashService.hashBcrypt(userDto.password),
                 role = userDto.role
             )
             userRepository.save(user)
