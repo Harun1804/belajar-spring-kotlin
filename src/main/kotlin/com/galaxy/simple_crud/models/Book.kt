@@ -25,6 +25,12 @@ data class Book(
     @Column()
     val price: Long = 0,
 
+    @Column()
+    val filename: String? = null,
+
+    @Column()
+    val filepath: String? = null,
+
     @Column(name = "created_at", nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     var createdAt: Date = Date(),

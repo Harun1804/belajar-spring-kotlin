@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/books")
 class BookController(
-    val bookService: BookService
+    private val bookService: BookService
 ): BaseController() {
     @GetMapping
     fun index(): ResponseEntity<ResponseFormatter> {
@@ -43,7 +43,7 @@ class BookController(
     }
 
     @PostMapping
-    fun store(@Valid @RequestBody bookDto: BookDto): ResponseEntity<ResponseFormatter> {
+    fun store(@Valid @ModelAttribute bookDto: BookDto): ResponseEntity<ResponseFormatter> {
         return handleRequest {
             bookService.store(bookDto)
             ResponseEntity.ok(
@@ -57,7 +57,7 @@ class BookController(
     }
 
     @PutMapping("/{id}")
-    fun update(@Valid @RequestBody bookDto: BookDto, @PathVariable("id") id: Long): ResponseEntity<ResponseFormatter> {
+    fun update(@Valid @ModelAttribute bookDto: BookDto, @PathVariable("id") id: Long): ResponseEntity<ResponseFormatter> {
         return handleRequest {
             bookService.update(bookDto, id)
             ResponseEntity.ok(
@@ -73,7 +73,7 @@ class BookController(
     @DeleteMapping("/{id}")
     fun destroy(@PathVariable("id") id: Long): ResponseEntity<ResponseFormatter> {
         return handleRequest {
-            bookService.delete(id)
+            bookService.destroy(id)
             ResponseEntity.ok(
                 ResponseFormatter(
                     status = true,
