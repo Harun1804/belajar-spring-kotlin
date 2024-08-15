@@ -1,5 +1,6 @@
 package com.galaxy.simple_crud.controllers
 
+import com.galaxy.simple_crud.dtos.LoginDto
 import com.galaxy.simple_crud.dtos.UserDto
 import com.galaxy.simple_crud.extendable.BaseController
 import com.galaxy.simple_crud.services.HashService
@@ -7,7 +8,6 @@ import com.galaxy.simple_crud.services.JwtService
 import com.galaxy.simple_crud.services.UserService
 import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -22,10 +22,10 @@ class AuthController(
 ) : BaseController() {
 
     @PostMapping("/login")
-    fun login(@Valid @RequestBody userDto: UserDto): ResponseEntity<ResponseFormatter> {
+    fun login(@Valid @RequestBody loginDto: LoginDto): ResponseEntity<ResponseFormatter> {
         return handleRequest {
-            val user = userService.findByEmail(userDto.email)
-            if (user != null && hashService.checkBcrypt(userDto.password, user.password)) {
+            val user = userService.findByEmail(loginDto.email)
+            if (user != null && hashService.checkBcrypt(loginDto.password, user.password)) {
                 ResponseEntity.ok(
                     ResponseFormatter(
                         status = true,
