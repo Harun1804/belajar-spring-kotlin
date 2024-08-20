@@ -4,6 +4,8 @@ import com.galaxy.simple_crud.dtos.BookDto
 import com.galaxy.simple_crud.models.Book
 import com.galaxy.simple_crud.repository.BookRepository
 import com.galaxy.simple_crud.utils.FileUpload
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 
 @Service
@@ -17,6 +19,10 @@ class BookService(
         val books = mutableListOf<Book>()
         bookRepository.findAll().forEach { book -> books.add(book) }
         return books
+    }
+
+    fun findAllPaginate(pageable: Pageable): Page<Book> {
+        return bookRepository.findAllByOrderByTitleAsc(pageable)
     }
 
     fun findById(id: Long): Book {

@@ -4,6 +4,7 @@ import com.galaxy.simple_crud.dtos.BookDto
 import com.galaxy.simple_crud.extendable.BaseController
 import com.galaxy.simple_crud.services.BookService
 import jakarta.validation.Valid
+import org.springframework.data.domain.PageRequest
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -21,6 +22,24 @@ class BookController(
                     code = 200,
                     data = bookService.findAll(),
                     message = "Success get all books"
+                )
+            )
+        }
+    }
+
+    @GetMapping("/paginate")
+    fun indexPaginate(
+        @RequestParam(defaultValue = "0") page: Int,
+        @RequestParam(defaultValue = "10") size: Int
+    ): ResponseEntity<ResponseFormatter> {
+        return handleRequest {
+        val pageable = PageRequest.of(page, size)
+            ResponseEntity.ok(
+                ResponseFormatter(
+                    status = true,
+                    code = 200,
+                    data = bookService.findAllPaginate(pageable),
+                    message = "Success get all books with pagination"
                 )
             )
         }
